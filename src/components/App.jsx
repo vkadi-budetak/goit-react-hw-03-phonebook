@@ -16,6 +16,23 @@ export class App extends React.Component {
     filter: '',
   };
 
+  componentDidMount() {
+    const stringifiedContacts = localStorage.getItem('contacts');
+    const parsetContacts = JSON.parse(stringifiedContacts) ?? [];
+    this.setState({
+      contacts: parsetContacts,
+    });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts.length !== prevState.contacts.length) {
+      const stringifiedContacts = JSON.stringify(this.state.contacts);
+      localStorage.setItem('contacts', stringifiedContacts);
+
+      console.log('Зміна відбулася в contacts');
+    }
+  }
+
   addContact = contactData => {
     const isDublicate = this.state.contacts.some(
       el => el.name === contactData.name
